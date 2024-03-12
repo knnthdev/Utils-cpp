@@ -1,0 +1,19 @@
+cmake_minimum_required(VERSION 3.10)
+
+set(CMAKE_SYSTEM_VERSION 10.0.22621.0)
+
+set(PROJECT_NAME "apolita")
+
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED True)
+set(CMAKE_BUILD_TYPE Debug)
+
+# Agrega el directorio de tus archivos fuente
+set(SOURCES_DIR ${CMAKE_SOURCE_DIR}/)
+
+include_directories(${CMAKE_SOURCE_DIR}/Document)
+
+# Busca todos los archivos fuente en el directorio
+file(GLOB SOURCES ${SOURCES_DIR}/*.cpp)
+
+add_executable(${PROJECT_NAME} ${SOURCES})
