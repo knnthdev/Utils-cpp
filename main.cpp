@@ -1,5 +1,5 @@
 #include <iostream>
-#include "main.h"
+#include "belly.h"
 #include <string>
 using namespace std;
 
