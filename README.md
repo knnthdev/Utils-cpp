@@ -42,14 +42,16 @@ Este repositorio contiene dos archivos de encabezado `(*.h)` escritos en `C++` q
 ### Tupla con instancia no estática:
 
 > - Permite obtener o crear una tupla con una instancia no estática.
-> - Utiliza plantillas variádicas para almacenar los valores en una clase stringstream.
-> - Devuelve el valor exacto ingresado.
+> - Utiliza plantillas variádicas para almacenar los valores en una clase `stringstream`.
+> - Devuelve argumentos ingresados a funciones y los indiza.
 
 ### Listado con nodos "`Belly\<typename>`"
 
-> - Similar a la clase vector, pero sin heredar sus métodos.
+> - Similar a la clase `vector`, pero sin heredar sus métodos.
 > - Proporciona la habilidad de `mapear` y `filtrar` datos usando funciones `lambda`.
-> - Permite al desarrollador modificar los datos a su gusto.
+> - Utiliza enlazamientos de nodos, de este modo el crecimiento de la memoria es dinámica y administrada.
+> - Permite `Crear`, `Actualizar`, `Modificar`, `Insertar` y `Eliminar` valores ingresados.
+> - Permite al desarrollador jugar con los datos a su gusto.
 
 ### Herramienta "`print(std::string, ...)`"
 
@@ -76,6 +78,25 @@ Ejemplo: <code><func>print</func>(<str>"size: {0}"</str>, <var>list</var>.<func>
 <symb>return</symb> <obj>utils</obj>::<func>print</func>(<str>"size: {0}"</str>, <var>list</var>.<func>size</func>());
 </section>
 }
+</section>
+---
+<section>
+output <br />
+0: 23 <br />
+1: 42 <br />
+2: 2 <br />
+3: 452 <br />
+4: 908 <br />
+5: 28399 <br />
+6: 654 <br />
+7: 8 <br />
+0: 40 <br />
+1: 0 <br />
+2: 450 <br />
+3: 906 <br />
+4: 652 <br />
+5: 6 <br />
+size: 8
 </section>
 
 ### Conoce más de mí:
