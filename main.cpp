@@ -1,6 +1,6 @@
 #include <iostream>
-#include "belly.h"
 #include <string>
+#include <belly.h>
 using namespace std;
 
 int main()
@@ -13,5 +13,5 @@ int main()
         return it % 2 == 0;
     }).Print();
     
-    return print("size: {0}", list.size());
+    return print("size: {}", list.size());
 }

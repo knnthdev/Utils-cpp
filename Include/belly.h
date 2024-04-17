@@ -1,5 +1,7 @@
+//version ==0.1.1==
 #if !defined(Program_H)
 #define Program_H
+#include <stdio.h>
 #include <iostream>
 #include "utils.h"
 #include <functional>
@@ -28,7 +30,7 @@ private:
     node *_first_node;
     node *_seq_nodes;
     int _size;
-    int InstanceCode = NULL;
+    int InstanceCode = 0;
     void init()
     {
         InstanceCode = reinterpret_cast<intptr_t>(this);
@@ -166,7 +168,7 @@ private:
     template <typename func>
     void _for_each_node(func action_nodeptr)
     {
-        auto cv = std::_Pass_fn(action_nodeptr);
+        auto cv = std::function(action_nodeptr);
         node *aux = _first_node;
         while (aux != nullptr)
         {
@@ -315,7 +317,7 @@ public:
     template <typename func>
     self &ForEach(func action_it)
     {
-        auto cv = std::_Pass_fn(action_it);
+        auto cv = std::function(action_it);
         _for_each_node([=](node *it)
                        { cv(it->value); });
         return *(this);
@@ -330,9 +332,8 @@ public:
         });
         return group;
     }
-    template <typename predicated>
-    self Filter(predicated func_it_bool){
-        auto cv = std::_Pass_fn(func_it_bool);
+    self Filter(std::function<bool(t)> func_it_bool){
+        auto cv = func_it_bool;
         self group;
         _for_each_node([&group, cv](node *it)
                        { if (cv(it->value)) { group._add_node(it->value); } });

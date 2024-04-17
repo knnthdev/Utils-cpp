@@ -1,20 +1,16 @@
+//vesion ==0.1.1==
 #ifndef EasyStream_H
 #define EasyStream_H
 #include <iostream>
 #include <cstdarg>
 #include <sstream>
 #include <string>
-#include <execution>
+#include <functional>
 
 namespace utils
 {
   template <typename... Args>
   class Tuple;
-
-  constexpr bool Contains(const std::string str, const std::string substr) noexcept
-  {
-    return str.find(substr) != std::string::npos;
-  }
 
   template <typename... Args>
   std::string concat(const char *msg, Args &&...args) noexcept
@@ -28,7 +24,7 @@ namespace utils
     const char *target = msg;
     size_t index = 0;
     bool open = false;
-    while (*target != char())
+    while (*target != char()) // find the instruccions
     {
       if (*target == '{')
       {
@@ -52,8 +48,10 @@ namespace utils
         {
           open = false; // close the journal;
           // make conversion to integer;
-          int number;
-          temp >> number;
+          int number = 0;
+          if(temp.showpos >= 0){
+            temp >> number;
+          }
           // get argument and convert the argument in string;
           if (number < (int signed)tup.Length)
             ss << tup[number];
@@ -104,7 +102,7 @@ namespace utils
   template <typename type, typename _func_i_it>
   void foreach_action(size_t count, type *obj, _func_i_it action)
   {
-    auto method = std::_Pass_fn(action);
+    auto method = std::function(action);
     for (int i = 0; (int unsigned)i < count; i++)
     {
       method(i, obj[i]);
@@ -138,8 +136,8 @@ private:
   int index = 0;
 
   using rubble = std::pair<std::stringstream, intptr_t>;
-  
-  rubble *_elements;
+
+  rubble *_elements = nullptr;
 
   template <typename return_type>
   return_type convertTo(rubble value)
@@ -152,7 +150,7 @@ private:
   template <typename... args>
   void recursion() {}
   template <typename t, typename... args>
-  void recursion(t first, args&&... rest)
+  void recursion(t first, args &&...rest)
   {
     rubble &element = _elements[index++];
     element.first << first;
@@ -162,7 +160,11 @@ private:
   }
 
 public:
+#if MSVC
   __readonly size_t Length;
+#else
+  size_t Length;
+#endif
   Tuple(Args... args)
   {
     Length = sizeof...(args);
@@ -176,14 +178,15 @@ public:
   template <typename request>
   request GetArg(int i) const
   {
-    if (Length ? i < (signed)Length : false){
+    if (Length ? i < (signed)Length : false)
+    {
       rubble &aux = _elements[i];
       if (typeid(request) == typeid(std::string))
         return aux.first.str();
-      else if (typeid(request) == typeid(const char*))
-        return (const char*)aux.first.str().c_str();
+      else if (typeid(request) == typeid(const char *))
+        return (const char *)aux.first.str().c_str();
       else
-        return *reinterpret_cast<request*>((intptr_t)aux.second);
+        return *reinterpret_cast<request *>((intptr_t)aux.second);
     }
     throw std::range_error("out range of index");
   }
@@ -191,12 +194,19 @@ public:
   {
     return GetArg<std::string>(_ind);
   }
-  template <typename typeof>
-  bool Typeof(int ind) { return ind < Length ? sizeof(reinterpret_cast<typeof>(_elements[ind])) > 0 : false; }
+  template <typename type>
+  bool Typeof(int ind)
+  {
+    return ind < Length ? sizeof(reinterpret_cast<type>(_elements[ind])) > 0 : false;
+  }
   template <typename T>
   T ConverTo(int ind) { return ind < Length ? convertTo<T>(_elements[ind]) : *((T *)nullptr); }
 
-  ~Tuple() { delete [] _elements; }
+  ~Tuple()
+  {
+    if (_elements != nullptr)
+      delete[] _elements;
+  }
 
   friend std::ostream &operator<<(std::ostream &os, Tuple &tup)
   {
